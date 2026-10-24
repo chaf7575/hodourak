@@ -87,7 +87,15 @@ footer{text-align:center;padding:20px;color:#64748b}
 <footer>حضورك © 2026 — نموذج تجريبي</footer>
 
 <script>
-const students=[];
+
+const students = [];
+const SUPABASE_URL = "https://xnlrabzezefdzgzgiaqs.supabase.co";
+const SUPABASE_KEY = "ضع_المفتاح_العام_هنا";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 const $=id=>document.getElementById(id);
 
 function render(){
