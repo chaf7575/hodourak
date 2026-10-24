@@ -31,8 +31,21 @@ footer{text-align:center;padding:20px;color:#64748b}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
+
 <body>
+<div id="loginBox" class="card">
+  <h2>تسجيل الدخول إلى حضورك</h2>
+  <label for="email">البريد الإلكتروني</label>
+  <input id="email" type="email" required placeholder="البريد الإلكتروني">
+  <label for="password">كلمة المرور</label>
+  <input id="password" type="password" required placeholder="كلمة المرور">
+  <button id="loginBtn" type="button">دخول</button>
+  <p id="loginMessage"></p>
+</div>
+
+<div id="appContent" hidden>
 <header>
+
 <h1>حضورك</h1>
 <div>منصة تسجيل حضور وغياب التلاميذ</div>
 <div>نموذج أولي للمتوسطات الجزائرية</div>
@@ -90,7 +103,7 @@ footer{text-align:center;padding:20px;color:#64748b}
 
 const students = [];
 const SUPABASE_URL = "https://xnlrabzezefdzgzgiaqs.supabase.co";
-const SUPABASE_KEY = "ضع_المفتاح_العام_هنا";
+const SUPABASE_KEY = "sb_publishable_RjLsGnLvQObZUbFm8rm2mQ_OElqFf5G";
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
