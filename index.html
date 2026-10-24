@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حضورك | تسيير الغياب المدرسي</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f2f5fa;color:#243247}
+header{background:#123b62;color:white;padding:24px 16px;text-align:center}
+header h1{margin:0 0 8px}
+main{max-width:900px;margin:22px auto;padding:0 14px}
+.card{background:white;padding:18px;border-radius:14px;margin-bottom:16px;box-shadow:0 3px 12px #0000000c}
+h2{font-size:19px;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.stat{background:#eaf2fa;padding:15px;border-radius:10px;text-align:center}
+.stat strong{display:block;font-size:27px;margin-top:8px}
+label{display:block;margin:12px 0 6px}
+input,select,button{width:100%;padding:12px;border:1px solid #ccd5df;border-radius:8px;font-size:16px}
+button{background:#1766a5;color:white;border:0;margin-top:12px;cursor:pointer}
+button:hover{background:#104b7c}
+.secondary{background:#64748b}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #e5eaf0;text-align:right}
+.status{font-weight:bold}
+.note{font-size:13px;color:#68778b;line-height:1.7}
+footer{text-align:center;padding:20px;color:#64748b}
+</style>
+</head>
+<body>
+<header>
+<h1>حضورك</h1>
+<div>منصة تسجيل حضور وغياب التلاميذ</div>
+<div>نموذج أولي للمتوسطات الجزائرية</div>
+</header>
+<main>
+<section class="card">
+<h2>لوحة القيادة</h2>
+<div class="grid">
+<div class="stat">عدد التلاميذ<strong id="total">0</strong></div>
+<div class="stat">الحاضرون<strong id="present">0</strong></div>
+<div class="stat">الغائبون<strong id="absent">0</strong></div>
+</div>
+</section>
+
+<section class="card">
+<h2>إضافة تلميذ تجريبي</h2>
+<form id="studentForm">
+<label for="student">اسم التلميذ</label>
+<input id="student" required placeholder="اسم تجريبي فقط">
+<label for="className">القسم</label>
+<select id="className">
+<option>1 متوسط 1</option>
+<option>2 متوسط 1</option>
+<option>3 متوسط 1</option>
+<option>4 متوسط 1</option>
+</select>
+<label for="cardId">رقم البطاقة التجريبي</label>
+<input id="cardId" required placeholder="مثال: CARD001">
+<button type="submit">إضافة التلميذ</button>
+</form>
+</section>
+
+<section class="card">
+<h2>قائمة التلاميذ</h2>
+<p class="note">هذه نسخة تجريبية. لا تسجل معلومات حقيقية للأطفال.</p>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>الاسم</th><th>القسم</th><th>البطاقة</th><th>الحالة</th><th>الإجراء</th></tr></thead>
+<tbody id="studentRows">
+<tr><td colspan="5">لا توجد بيانات بعد.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="card">
+<h2>الإشعارات</h2>
+<p id="notice">لم تُسجل أي إشعارات بعد.</p>
+<p class="note">إرسال الرسائل إلى هواتف الأولياء غير مفعّل في هذه النسخة.</p>
+</section>
+</main>
+<footer>حضورك © 2026 — نموذج تجريبي</footer>
+
+<script>
+const students=[];
+const $=id=>document.getElementById(id);
+
+function render(){
+$("total").textContent=students.length;
+$("present").textContent=students.filter(s=>s.status==="حاضر").length;
+$("absent").textContent=students.filter(s=>s.status==="غائب").length;
+const rows=$("studentRows");
+rows.replaceChildren();
+if(!students.length){
+const tr=document.createElement("tr"),td=document.createElement("td");
+td.colSpan=5;td.textContent="لا توجد بيانات بعد.";
+tr.appendChild(td);rows.appendChild(tr);return;
+}
+students.forEach((s,i)=>{
+const tr=document.createElement("tr");
+[s.name,s.className,s.cardId,s.status].forEach(value=>{
+const td=document.createElement("td");td.textContent=value;tr.appendChild(td);
+});
+const td=document.createElement("td");
+const btn=document.createElement("button");
+btn.textContent=s.status==="حاضر"?"تسجيل الغياب":"تسجيل الحضور";
+btn.className="secondary";
+btn.onclick=()=>{
+s.status=s.status==="حاضر"?"غائب":"حاضر";
+$("notice").textContent="تم تحديث حالة "+s.name+" إلى "+s.status+" (محاكاة فقط).";
+render();
+};
+td.appendChild(btn);tr.appendChild(td);rows.appendChild(tr);
+});
+}
+$("studentForm").addEventListener("submit",e=>{
+e.preventDefault();
+const name=$("student").value.trim();
+const className=$("className").value;
+const cardId=$("cardId").value.trim();
+if(students.some(s=>s.cardId===cardId)){
+alert("رقم البطاقة مسجل من قبل.");return;
+}
+students.push({name,className,cardId,status:"غير مسجل"});
+$("notice").textContent="أُضيف تلميذ تجريبي. لم تُرسل أي رسالة.";
+e.target.reset();
+render();
+});
+render();
+</script>
+</body>
+</html>
